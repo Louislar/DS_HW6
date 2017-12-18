@@ -25,7 +25,7 @@ public:
 
 void dfs(int vertice, int out[])
 {
-
+    
 }
 
 
@@ -56,7 +56,7 @@ int main()
 
 
 
-    /*********dfs********/
+    /*********input********/
     int x;
     ifs>>x;                  //how many test data
     cout<<x<<endl;
@@ -79,23 +79,41 @@ int main()
             chainNode* cur1=graph[temp1];
             if(cur1==0)
             {
-                
+                graph[temp1]=new chainNode(temp2, 0);
             }
             else
             {
                 for(;cur1->link!=0;cur1=cur1->link);
-                cur1=new chainNode(temp2, 0);
+                cur1->link=new chainNode(temp2, 0);
             }
 
             chainNode* cur2=graph[temp2];
-            for(;cur2->link!=0;cur2=cur2->link);
-            cur2=new chainNode(temp1, 0);
+            if(cur2==0)
+            {
+                graph[temp2]=new chainNode(temp1, 0);
+            }
+            else
+            {
+                for(;cur2->link!=0;cur2=cur2->link);
+                cur2->link=new chainNode(temp1, 0);
+            }
         }
 
-        //cout<<graph[1];
 
+        /**********input-test**********/
+        /*for(int i=1;i<n+1;i++)
+        {
+            cout<<i<<": ";
+            if(graph[i])
+            {
+                chainNode* cur=graph[i];
+                for(;cur;cur=cur->link) cout<<cur->data<<" ";
+            }
+            cout<<endl;
+        }*/
 
-        //dfs
+        /**********dfs**********/
+        /**********undone**********/
         int out[n+1];
         for(int l=0;l<n+1;l++) out[l]=0; //initial
 
