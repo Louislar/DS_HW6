@@ -1,4 +1,5 @@
 #include<iostream>
+#include<fstream>
 
 using namespace std;
 
@@ -30,17 +31,41 @@ void dfs(int vertice, int out[])
 
 int main()
 {
-    /*chainNode* graph[8];*/
+    /***********file input**********/
+    ifstream ifs;
+    char filename[100];
+    for(int i=0;i<100;i++) filename[i]='\0';
+    int filenameLength=0;
+    cout<<"Input file name: ";
+    {
+        char temp;
+        while(cin.get(temp))
+        {
+            if(temp=='\n') break;
+            else
+            {
+                filename[filenameLength]=temp;
+                filenameLength++;
+            }
+        }
+    }
+    ifs.open(filename, ios::in);
 
 
+
+
+
+
+    /*********dfs********/
     int x;
-    cin>>x;                  //how many test data
+    ifs>>x;                  //how many test data
+    cout<<x<<endl;
     for(int i=0;i<x;i++)
     {
         int n;              //  vertice
         int k;              //  edge
-        cin>>n;
-        cin>>k;
+        ifs>>n;
+        ifs>>k;
         chainNode* graph[n+1];  //  vertices number start from 1
         for(int l=0;l<n+1;l++) graph[l]=0; //initial
 
@@ -48,17 +73,27 @@ int main()
         {
             int temp1;
             int temp2;
-            cin>>temp1;
-            cin>>temp2;
+            ifs>>temp1;
+            ifs>>temp2;
 
             chainNode* cur1=graph[temp1];
-            for(;cur1->link!=0;cur1=cur1->link);
-            cur1=new chainNode(temp2, 0);
+            if(cur1==0)
+            {
+                
+            }
+            else
+            {
+                for(;cur1->link!=0;cur1=cur1->link);
+                cur1=new chainNode(temp2, 0);
+            }
 
             chainNode* cur2=graph[temp2];
             for(;cur2->link!=0;cur2=cur2->link);
             cur2=new chainNode(temp1, 0);
         }
+
+        //cout<<graph[1];
+
 
         //dfs
         int out[n+1];
