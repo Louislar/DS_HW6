@@ -23,9 +23,32 @@ public:
 
 /***************** start from here ********************/
 
-void dfs(int vertice, int out[])
+void dfs(int vertice, chainNode* graph[]
+         , int out[], int& outLength, int visited[]
+         , int black[])
 {
-    
+    out[outLength]=vertice;
+    outLength++;
+    visited[vertice]=1;
+    //cout<<vertice<<endl;
+    /**********make black**********/
+    chainNode* black_cur=graph[vertice];
+    int cannotBlack=0;
+    for(;black_cur;black_cur=black_cur->link)
+    {
+        if(black[black_cur->data]==1)
+            cannotBlack=1;
+    }
+    if(!cannotBlack) black[vertice]=1;
+
+    /**********make black-end**********/
+
+    chainNode* cur=graph[vertice];
+    for(;cur;cur=cur->link)
+    {
+        if(!visited[cur->data])
+            dfs(cur->data, graph, out, outLength, visited, black);
+    }
 }
 
 
@@ -59,8 +82,9 @@ int main()
     /*********input********/
     int x;
     ifs>>x;                  //how many test data
-    cout<<x<<endl;
-    for(int i=0;i<x;i++)
+    /*cout<<"\nx: ";
+    cout<<x<<endl;*/
+    for(int y=0;y<x;y++)
     {
         int n;              //  vertice
         int k;              //  edge
@@ -115,10 +139,71 @@ int main()
         /**********dfs**********/
         /**********undone**********/
         int out[n+1];
+        int outLength=0;
+        int visited[n+1];
+        int black[n+1];
+        int blacknum=0;
         for(int l=0;l<n+1;l++) out[l]=0; //initial
+        for(int l=0;l<n+1;l++) visited[l]=0; //initial
+        for(int l=0;l<n+1;l++) black[l]=0; //initial
+
+        for(int q=1;q<n+1;q++){
+        int blackTemp[n+1];
+        int blackTempnum=0;
+        for(int l=0;l<n+1;l++) blackTemp[l]=0; //initial
+
+        dfs(q, graph, out, outLength, visited, blackTemp);
+
+        {//if separate graph
+            for(int l=1;l<n+1;l++)
+            {
+                if(visited[l]==0)
+                    dfs(l, graph, out, outLength, visited, blackTemp);
+            }
+
+        }
+        //count blacknum
+        for(int l=0;l<n+1;l++)
+        {
+            if(blackTemp[l]==1)
+                blackTempnum++;
+        }
+        if(blackTempnum>=blacknum)
+        {
+            blacknum=blackTempnum;
+            for(int l=0;l<n+1;l++)
+                black[l]=blackTemp[l];
+        }
+
+        /**********initial**********/
+        for(int l=0;l<n+1;l++) out[l]=0; //initial
+        for(int l=0;l<n+1;l++) visited[l]=0; //initial
+        outLength=0;
+        }//for q end
+
+        /*********output**********/
+        cout<<blacknum<<endl;
+        for(int l=1;l<n+1;l++)
+        {
+            if(black[l]==1)
+                cout<<l<<" ";
+        }
+        cout<<endl;
+
+        /**********out[]-test*********/
+        /*cout<<"out[]: ";
+        for(int l=0;l<outLength;l++)
+            cout<<out[l]<<" ";
+        cout<<endl;*/
+
+        /**********black[]-test*********/
+        /*cout<<"black[]: ";
+        for(int l=1;l<n+1;l++)
+            cout<<black[l]<<" ";
+        cout<<endl;*/
 
 
 
 
-    }// x for end
+    }// y for end
 }
